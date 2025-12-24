@@ -1,0 +1,93 @@
+# Multicampus diagnosis of the institutional tutoring model as a guarantee of the human right to higher education
+## Database and Processing of University Tutoring Statistics (2015–2024)
+
+This repository documents the process of building, cleaning, extrapolating, and projecting university tutoring data based on a database structured in MySQL and subsequently processed in Python (Google Colab).
+
+The main objective is to obtain a consistent and complete dataset for the longitudinal analysis of tutoring at the faculty level, covering the period 2015–2024.
+
+## General project structure
+
+The work was carried out in two main stages:
+
+1. Structuring and consolidation of data in MySQL  
+2. Processing, extrapolation, and projection in Python  
+
+## 1) Project context
+
+A **relational MySQL database** was built with historical tutoring information, integrating records from **2015 to 2024**.  
+The data were then exported to a `.csv` file to be processed in **Python (pandas)** within Google Colab, with the following objectives:
+
+- To complete missing values (especially **2015**) in a reproducible manner.
+- To generate and/or estimate data for **2024** using historical trends and observed rates.
+- To verify internal consistency (logical rules between enrollment, graduation, and degree completion).
+- To produce a final clean dataset ready for **longitudinal econometric analysis**, particularly panel data models focused on academic trajectories.
+
+---
+
+## 2. Database construction and processing
+
+### 2.1 Structuring in MySQL
+
+- A relational database was designed in **MySQL**, structured by:
+  - Faculty
+  - Year (2015–2024)
+- Institutional variables were integrated, including:
+  - Enrollment (first semester, third semester, and total)
+  - Tutoring activities and interventions
+  - Academic staff
+  - Graduation and degree completion
+
+The consolidated database ensured temporal consistency and comparability across academic units.
+
+### 2.2 Processing and extrapolation in Python
+
+Data processing was carried out in a **Google Colab notebook**, mainly using `pandas`, `numpy`, and visualization tools.
+
+The main tasks performed were:
+
+- **Initial data loading and preparation**
+  - Importing the file `tutorias_facultad_2015_2024.csv`.
+  - Setting data types and temporal ordering.
+
+- **Extrapolation of missing data for 2015**
+  - Filling missing values through linear extrapolation based on the 2016–2023 historical trend, applied by faculty.
+  - Extrapolated variables included: tutoring interventions, number of tutors, and academic staff.
+
+- **Generation of projected data for 2024**
+  - Estimation of first-semester enrollment using trend extrapolation.
+  - Calculation of third-semester enrollment using historical retention rates.
+  - Projection of total enrollment while ensuring internal consistency.
+  - Estimation of graduates and degree holders based on historical rates.
+  - Extrapolation of other numerical variables using linear methods.
+
+- **Adjustments and consistency checks**
+  - Validation that total enrollment was greater than or equal to the sum of first- and third-semester enrollment.
+  - Correction of outlier cases, including a faculty where third-semester enrollment incorrectly exceeded first-semester enrollment.
+  - Graphical review of trends to detect outliers in the 2024 projections.
+
+### 2.3 Final result
+
+The final output is a **consolidated DataFrame (`df_extrap`)** containing:
+
+- Observed data (2015–2023).
+- Extrapolated values for 2015.
+- Projected and adjusted data for 2024.
+
+This dataset is ready for use in **descriptive statistical analysis and panel data econometric models**.
+
+---
+
+## 3. Reproducibility
+
+This repository is designed to ensure:
+
+- Transparency in data treatment.
+- Reproducibility of results.
+- Traceability between the original administrative database and the final analytical dataset.
+
+---
+
+## License
+
+This repository is shared for academic and research purposes.  
+Use of the information is subject to the institutional policies of the University of Colima.
