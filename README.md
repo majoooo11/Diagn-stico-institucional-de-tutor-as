@@ -1,5 +1,5 @@
 # Diagnóstico multicampus del modelo institucional de tutorías como garantía del derecho humano a la educación superior
-## Base de Datos y Procesamiento de Tutorías Universitarias (2015–2024)
+## Base de Datos y Procesamiento de Estadística de Tutorías Universitarias (2015–2024)
 
 Este repositorio documenta el proceso de construcción, depuración, extrapolación y proyección de datos de tutorías universitarias a partir de una base de datos estructurada en MySQL y trabajada posteriormente en Python (Google Colab).
 
@@ -21,50 +21,76 @@ Posteriormente, se exportaron datos a un archivo `.csv` para trabajar en **Pytho
 - Completar valores faltantes (especialmente **2015**) de forma reproducible.
 - Generar y/o estimar datos para **2024** usando tendencias históricas y tasas observadas.
 - Verificar consistencia interna (reglas lógicas entre matrículas/egresos/titulación).
-- Dejar un dataset final limpio y listo para análisis estadístico/econométrico.
+- Dejar un dataset final limpio y listo para **análisis econométrico longitudinal**, particularmente modelos de datos de panel orientados al estudio de trayectorias académicas.
 
 ---
 
-## 2) Dataset de trabajo en Python (Colab)
+---
 
-En el cuaderno se trabajó con:
+## 2. Construcción y procesamiento de la base de datos
 
-- `tutorias_facultad_2015_2024.csv`
+### 2.1 Estructuración en MySQL
 
-Cargado en un `DataFrame` de pandas para transformar, completar y validar.
+- Se diseñó una base de datos relacional en **MySQL**, estructurada por:
+  - Facultad
+  - Año (2015–2024)
+- Se integraron variables institucionales relacionadas con:
+  - Matrícula (primer semestre, tercer semestre y total)
+  - Tutorías e intervenciones
+  - Personal académico
+  - Egreso y titulación
+
+La base consolidada permitió asegurar consistencia temporal y comparabilidad entre unidades académicas.
+
+### 2.2 Procesamiento y extrapolación en Python
+
+El procesamiento se realizó en un **cuaderno de Google Colab**, utilizando principalmente `pandas`, `numpy` y herramientas de visualización.
+
+Las principales tareas realizadas fueron:
+
+- **Carga y preparación inicial de datos**
+  - Importación del archivo `tutorias_facultad_2015_2024.csv`.
+  - Configuración de tipos de datos y ordenamiento temporal.
+
+- **Extrapolación de datos faltantes para 2015**
+  - Relleno de valores ausentes mediante extrapolación lineal basada en la tendencia histórica 2016–2023, aplicada por facultad.
+  - Variables extrapoladas: intervenciones tutoriales, número de tutores y personal académico.
+
+- **Generación de datos proyectados para 2024**
+  - Estimación de matrícula de nuevo ingreso mediante extrapolación de tendencias.
+  - Cálculo de matrícula de tercer semestre usando tasas históricas de retención.
+  - Proyección de matrícula total asegurando consistencia interna.
+  - Estimación de egresados y titulados a partir de tasas históricas.
+  - Extrapolación de otras variables numéricas mediante métodos lineales.
+
+- **Ajustes y verificaciones de consistencia**
+  - Validación de que la matrícula total fuera mayor o igual a la suma de los estudiantes de primer y tercer semestre.
+  - Corrección de casos atípicos, incluyendo una facultad donde la matrícula de tercer semestre superaba incorrectamente a la de primer semestre.
+  - Revisión gráfica de tendencias para detectar valores atípicos en las proyecciones de 2024.
+
+### 2.3 Resultado final
+
+El resultado es un **DataFrame consolidado (`df_extrap`)** que contiene:
+
+- Datos observados (2015–2023).
+- Valores extrapolados para 2015.
+- Datos proyectados y ajustados para 2024.
+
+Este conjunto de datos está listo para su uso en **análisis estadístico descriptivo y modelos econométricos de datos de panel**.
 
 ---
 
-## 3) ¿Qué se hizo en el cuaderno? (Resumen reproducible)
+## 3. Reproducibilidad
 
-### A) Carga y preparación inicial
-- Se cargó el `.csv` a un DataFrame (`df`) y se aplicaron configuraciones básicas de limpieza/formatos.
+El repositorio está diseñado para asegurar:
 
-### B) Completar valores faltantes para 2015 (extrapolación)
-- Se completaron valores faltantes del año **2015** en columnas clave (p. ej., relacionadas con **intervenciones** y **tutores**) mediante **extrapolación lineal** usando la trayectoria histórica **2016–2023**, aplicada **por facultad**.
+- Transparencia en el tratamiento de datos.
+- Reproducibilidad de los resultados.
+- Trazabilidad entre la base administrativa original y los datos analíticos finales.
 
-### C) Generación/estimación de datos para 2024
-Se implementó una función para estimar variables de 2024 con base en tendencias y tasas históricas:
+---
 
-- **Matrícula de nuevo ingreso (primer semestre):** extrapolación de tendencia histórica.
-- **Matrícula de tercer semestre:** estimada a partir de **tasas históricas de retención**, garantizando que no excediera el primer ingreso.
-- **Matrícula total:** extrapolación y ajuste para consistencia con semestres (primer/tercer).
-- **Egresados y titulados:** estimados usando **tasas históricas** de egreso y titulación.
-- **Otras variables numéricas** (personal, intervenciones, etc.): extrapolación lineal.
+## Licencia
 
-### D) Reglas de consistencia y correcciones
-Tras generar 2024 se aplicaron verificaciones:
-
-- Se validó que la **matrícula total** fuera **≥** a la suma de estudiantes de **primer** y **tercer semestre**.
-- Se detectó y corrigió un caso específico (Facultad 30) donde la matrícula de **tercer semestre** resultaba mayor que la de **primer ingreso**, ajustándolo con una tasa de deserción/retención más robusta.
-- Se revisaron posibles **valores atípicos** en la proyección de primer ingreso 2024 y se visualizó la tendencia para una facultad como ejemplo.
-
-### E) Resultado final
-El DataFrame final (`df_extrap`) contiene:
-
-- Datos originales,
-- Valores completados para 2015,
-- Datos estimados para 2024,
-- Con consistencia interna verificada,
-
-listo para análisis posterior o exportación.
+Este repositorio se comparte con fines académicos y de investigación.  
+El uso de la información está sujeto a las políticas institucionales de la Universidad de Colima.
